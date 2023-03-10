@@ -1,8 +1,11 @@
 package com.srsov.blog.model;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 
 public class Post {
 	
@@ -12,14 +15,20 @@ public class Post {
 	private String content;
 	private LocalDateTime publishedOn;
 	private LocalDateTime updatedOn;
+	private AggregateReference<Author, Integer> author;
+	//Set because there will be no duplicate comments
+	private Set<Comment> comments = new HashSet<>();
+	
+
 	//author
 	//comments
 	
 	//constructor
-	public Post(String title, String content) {
+	public Post(String title, String content, AggregateReference<Author, Integer> author) {
 		this.title = title;
 		this.content = content;
 		this.publishedOn = LocalDateTime.now();
+		this.author=author;
 	}
 
 	public Integer getId() {
@@ -68,6 +77,26 @@ public class Post {
 				+ ", updatedOn=" + updatedOn + "]";
 	}
 
+	public AggregateReference<Author, Integer> getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(AggregateReference<Author, Integer> author) {
+		this.author = author;
+	}
+
+	public Set<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
+	
+	public void addComment(Comment comment) {
+		comments.add(comment);
+		//comment.post = this;
+	}
 	
 
 }

@@ -4,8 +4,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jdbc.core.mapping.AggregateReference;
 
+import com.srsov.blog.model.Author;
+import com.srsov.blog.model.Comment;
 import com.srsov.blog.model.Post;
+import com.srsov.blog.repository.AuthorRepository;
 import com.srsov.blog.repository.PostRepository;
 
 
@@ -17,14 +21,17 @@ public class SpringBootBlogApplication {
 	}
 	
 	
-	/*
+	
 	@Bean
-	CommandLineRunner commandLineRunner(PostRepository posts) {
+	CommandLineRunner commandLineRunner(PostRepository posts, AuthorRepository authors) {
 		return args -> {
-			posts.save(new Post("Hello, World!", "Welcome to my blog!"));
+			AggregateReference<Author, Integer> dan = AggregateReference.to(authors.save(new Author(null, "Dan", "Vega", "danvega@gmail.com", "dvega")).id());
+			Post post = new Post("Hello, World!", "Welcome to my blog!", dan);
+			post.addComment(new Comment("Dan", "This is my first comment"));
+			posts.save(post);
 		};
 	}
-	*/
+	
 	@Bean
 	CommandLineRunner commandLineRunner2(PostRepository posts) {
 		return args -> {
