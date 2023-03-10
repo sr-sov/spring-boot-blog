@@ -1,4 +1,4 @@
-package repository;
+package com.srsov.blog.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
